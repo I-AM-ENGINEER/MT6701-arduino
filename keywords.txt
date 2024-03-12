@@ -1,0 +1,31 @@
+#######################################
+# Syntax Coloring Map For PWMrelay
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+MT6701	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+initializeI2C	KEYWORD2
+initializeSSI   KEYWORD2
+angleRead       KEYWORD2
+fieldStatusRead KEYWORD2
+uvwModeSet      KEYWORD2
+abzModeSet      KEYWORD2
+nanbnzEnable    KEYWORD2
+analogModeSet   KEYWORD2
+pwmModeSet      KEYWORD2
+offsetSet       KEYWORD2
+hysteresisSet   KEYWORD2
+directionSet    KEYWORD2
+programmEEPROM  KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
