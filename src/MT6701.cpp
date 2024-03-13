@@ -125,7 +125,9 @@ void MT6701::uvwModeSet( uint8_t pole_pairs ){
 	mt6701_mode_set(&this->handle, MT6701_MODE_UVW);
 }
 
-void MT6701::abzModeSet( uint16_t pulses_per_round ){
+void MT6701::abzModeSet( uint16_t pulses_per_round, mt6701_pulse_width_t z_pulse_width, mt6701_hyst_t hysteresis ){
+	mt6701_pulse_width_set(&this->handle, z_pulse_width);
+	mt6701_hyst_set(&this->handle, hysteresis);
 	mt6701_abz_pulse_per_round_set(&this->handle, pulses_per_round);
 	mt6701_mode_set(&this->handle, MT6701_MODE_ABZ);
 }
@@ -135,8 +137,8 @@ void MT6701::nanbnzEnable( bool nanbnz_enable ){
 }
 
 void MT6701::analogModeSet( float start, float stop ){
-	mt6701_out_mode_set(&this->handle, MT6701_OUT_MODE_ANALOG);
 	mt6701_a_start_stop_set(&this->handle, start, stop);
+	mt6701_out_mode_set(&this->handle, MT6701_OUT_MODE_ANALOG);
 }
 
 void MT6701::pwmModeSet( mt6701_pwm_freq_t frequency, mt6701_pwm_pol_t polarity ){
@@ -147,10 +149,6 @@ void MT6701::pwmModeSet( mt6701_pwm_freq_t frequency, mt6701_pwm_pol_t polarity 
 
 void MT6701::offsetSet( float offset ){
 	mt6701_zero_set(&this->handle, offset);
-}
-
-void MT6701::hysteresisSet( mt6701_hyst_t hysteresis ){
-	mt6701_hyst_set(&this->handle, hysteresis);
 }
 
 void MT6701::directionSet( mt6701_direction_t direction ){

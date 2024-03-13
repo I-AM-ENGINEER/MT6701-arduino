@@ -24,14 +24,13 @@ public:
 
 	// I2C only functions
 	void uvwModeSet( uint8_t pole_pairs );
-	void abzModeSet( uint16_t pulses_per_round );
+	void abzModeSet( uint16_t pulses_per_round, mt6701_pulse_width_t z_pulse_width, mt6701_hyst_t hysteresis );
 	void nanbnzEnable( bool nanbnz_enable ); // Only for QFN version
 	// Analog/PWM pin mode select
 	void analogModeSet( float start, float stop );
 	void pwmModeSet( mt6701_pwm_freq_t frequency, mt6701_pwm_pol_t polarity );
 	// General tracking options
 	void offsetSet( float offset );
-	void hysteresisSet( mt6701_hyst_t hysteresis );
 	void directionSet( mt6701_direction_t direction );
 	// Save settings as default
 	void programmEEPROM( void );

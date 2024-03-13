@@ -52,16 +52,16 @@ uint8_t mt6701_abz_pulse_per_round_set( mt6701_handle_t *handle, uint16_t resolu
 	}
 
 	resolution--;
-	if(resolution > 1024){
+	if(resolution >= 1024){
 		return MT6701_ERR_OUT_OF_RANGE;
 	}
 
-	res = handle->i2c_write(MT6701_REG_ABZ_RES0, resolution);
+	res = handle->i2c_read(MT6701_REG_ABZ_RES8, &data);
 	if(res != 0){
 		return MT6701_ERR_IO;
 	}
 
-	res = handle->i2c_read(MT6701_REG_ABZ_RES8, &data);
+	res = handle->i2c_write(MT6701_REG_ABZ_RES0, (uint8_t)resolution);
 	if(res != 0){
 		return MT6701_ERR_IO;
 	}
@@ -70,7 +70,7 @@ uint8_t mt6701_abz_pulse_per_round_set( mt6701_handle_t *handle, uint16_t resolu
 	data &= ~MT6701_REG_ABZ_RES8_MASK;
 	data |= (uint8_t)(resolution << MT6701_REG_ZERO8_POS);
 
-	res = handle->i2c_write(MT6701_REG_ABZ_RES0, data);
+	res = handle->i2c_write(MT6701_REG_ABZ_RES8, data);
 	if(res != 0){
 		return MT6701_ERR_IO;
 	}
@@ -123,9 +123,9 @@ uint8_t mt6701_mode_set( mt6701_handle_t *handle, mt6701_mode_t mode ){
 	}
 
 	if(mode == MT6701_MODE_UVW){
-		data &= ~MT6701_REG_ABZ_MUX_MASK;
-	}else if(mode == MT6701_MODE_ABZ){
 		data |=  MT6701_REG_ABZ_MUX_MASK;
+	}else if(mode == MT6701_MODE_ABZ){
+		data &= ~MT6701_REG_ABZ_MUX_MASK;
 	}
 
 	res = handle->i2c_write(MT6701_REG_ABZ_MUX, data);
@@ -276,9 +276,14 @@ uint8_t mt6701_a_start_stop_set( mt6701_handle_t *handle, float start, float sto
 	uint16_t start_u16;
 	uint16_t stop_u16;
 
-	start_u16 = (uint16_t)(start * (16384.0f/360.0f));
-	stop_u16  = (uint16_t)(start * (16384.0f/360.0f));
-
+	start_u16 = (uint16_t)(start * (4096.0f/360.0f));
+	stop_u16  = (uint16_t)(stop * (4096.0f/360.0f));
+	if(start_u16 >= 4096){
+		start_u16 = 0;
+	}
+	if(stop_u16 >= 4096){
+		stop_u16 = 4095;
+	}
 	res = mt6701_a_start_stop_set_raw(handle, start_u16, stop_u16);
 	return res;
 }

@@ -92,17 +92,16 @@ Other functions are I2C only and used for configure chip for imitate other encod
 
 ```c
   void uvwModeSet( uint8_t pole_pairs );
-  void abzModeSet( uint16_t pulses_per_round );
+  void abzModeSet( uint16_t pulses_per_round, mt6701_pulse_width_t z_pulse_width, mt6701_hyst_t hysteresis );
   void nanbnzEnable( bool nanbnz_enable ); // Only for QFN version
   // Analog/PWM pin mode select
   void analogModeSet( float start, float stop );
   void pwmModeSet( mt6701_pwm_freq_t frequency, mt6701_pwm_pol_t polarity );
   // General tracking options
   void offsetSet( float offset );
-  void hysteresisSet( mt6701_hyst_t hysteresis );
   void directionSet( mt6701_direction_t direction );
-  // Save settings as default
+  // Save settings as default for chip
   void programmEEPROM( void );
 ```
 
-If you need more information for this functuions, read examples (now theys unwrited, check sources ;) and datasheet
+If you need more information for this functions, read examples they include all function and arguments description. For further information, read datasheet

@@ -4,13 +4,15 @@
 MT6701 encoder;
 
 void setup() {
-  Serial.begin(115200);
   Wire.begin();
   encoder.initializeI2C();
+
+  // Hom many poles should be emulated
+  encoder.uvwModeSet(4);
+  // Chip could be setting in ABZ mode wtih MODE pin
 }
 
+
 void loop() {
-  float angle = encoder.angleRead();
-  Serial.println(angle);
-  delay(100);
+  // Nothing
 }
