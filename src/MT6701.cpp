@@ -121,13 +121,13 @@ bool MT6701::_trackLossCheck( void ){
 }
 
 void MT6701::uvwModeSet( uint8_t pole_pairs ){
-	mt6701_mode_set(&this->handle, MT6701_MODE_UVW);
 	mt6701_uvw_pole_pair_set(&this->handle, pole_pairs);
+	mt6701_mode_set(&this->handle, MT6701_MODE_UVW);
 }
 
 void MT6701::abzModeSet( uint16_t pulses_per_round ){
-	mt6701_mode_set(&this->handle, MT6701_MODE_ABZ);
 	mt6701_abz_pulse_per_round_set(&this->handle, pulses_per_round);
+	mt6701_mode_set(&this->handle, MT6701_MODE_ABZ);
 }
 
 void MT6701::nanbnzEnable( bool nanbnz_enable ){
