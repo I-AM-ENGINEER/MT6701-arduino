@@ -1,3 +1,30 @@
+/*
+
+This is a library for MT6701 encoder IC sensor.
+
+MIT License
+
+Copyright (c) 2024 I_AM_ENGINEER
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
 #include "mt6701.h"
 #include <stdlib.h>
 
@@ -155,8 +182,8 @@ uint8_t mt6701_zero_set_raw( mt6701_handle_t *handle, uint16_t zero_angle ){
 	if(res != 0){
 		return res;
 	}
-
-	zero_angle &= 0x3FFF;	
+	
+	zero_angle &= 0x0FFF;	
 
 	res = handle->i2c_write(MT6701_REG_ZERO0, (uint8_t)zero_angle);
 	if(res != 0){
@@ -184,7 +211,7 @@ uint8_t mt6701_zero_set( mt6701_handle_t *handle, float zero_angle ){
 	uint8_t res;
 	uint16_t data;
 
-	data = (uint16_t)(zero_angle * (16384.0f/360.0f));
+	data = (uint16_t)(zero_angle * (4096.0f/360.0f));
 	res = mt6701_zero_set_raw(handle, data);
 
 	return res;

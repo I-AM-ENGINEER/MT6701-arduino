@@ -1,7 +1,18 @@
+/*
+ * Arduino     |      MT6701
+ *  PIN13   <----->    CLK
+ *  PIN12   <----->    DO/SDA
+ *  PINx    <----->    CSN
+ * 
+ * For CSN you can use any free pin, expect 0, 1, 11, in this example i use pin 9. 
+ * You can connect other SPI sensors, they should functional fine.
+*/
+
 #include <Arduino.h>
 #include <SPI.h>
 #include "MT6701.h"
 
+// You could set any pin
 #define CS_PIN  9
 
 MT6701 encoder;

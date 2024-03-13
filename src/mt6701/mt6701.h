@@ -1,3 +1,30 @@
+/*
+
+This is a library for MT6701 encoder IC sensor.
+
+MIT License
+
+Copyright (c) 2024 I_AM_ENGINEER
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
 #ifndef MT6701_H__
 #define MT6701_H__
 
@@ -183,7 +210,7 @@ uint8_t mt6701_interface_set( mt6701_handle_t *handle, mt6701_interface_t interf
 
 /// @brief Set zero offset in 12 bit position value
 /// @param handle mt6701 handler
-/// @param zero_angle Raw angle [0...16383]
+/// @param zero_angle Raw angle [0...4096]
 /// @return On OK return 0, else see MT6701_ERR codes
 uint8_t mt6701_zero_set_raw( mt6701_handle_t *handle, uint16_t zero_angle );
 
@@ -216,8 +243,8 @@ uint8_t mt6701_read( mt6701_handle_t *handle, float *angle, mt6701_status_t *fie
 
 /// @brief Set start and stop angles raw
 /// @param handle 
-/// @param start [0...16383]
-/// @param stop [0...16383]
+/// @param start [0...4096]
+/// @param stop [0...4096]
 /// @return On OK return 0, else see MT6701_ERR codes
 uint8_t mt6701_a_start_stop_set_raw( mt6701_handle_t *handle, uint16_t start, uint16_t stop );
 
