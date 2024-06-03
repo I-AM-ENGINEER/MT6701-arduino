@@ -15,7 +15,7 @@ This is arduino wrapper for my [MT6701 lib](https://github.com/I-AM-ENGINEER/MT6
 
 ### SSI
 SSI is fast, you can connect many encoders, setting different CSN for each one. You can only read angle and pole strength, write settings in SSI impossible due chip limitations.
-Lib support only SSI over hardware SPI, this pinout for arduino UNO/nano, i didnt test on others boards.
+Lib support only SSI over hardware SPI, this pinout for arduino UNO/nano and ESP32, i didnt test on others boards, but if they have arduino framework, should work fine.
 If you have problems with reading stability, you can adjust connection speed by redefing SSI speed (default 1MHz, max 8MHz), BEFORE (important!) include library.
 
 #### Wiring
@@ -24,6 +24,13 @@ If you have problems with reading stability, you can adjust connection speed by 
   PIN13   <----->    CLK
   PIN12   <----->    DO/SDA
   PINx    <----->    CSN
+```
+
+```
+ ESP32 (VSPI) |      MT6701
+  D18     <----->    CLK
+  D19     <----->    DO/SDA
+  Dx      <----->    CSN
 ```
 
 For CSN you can use any free pin, expect 0, 1, 11, in examples i use pin 9.
@@ -57,6 +64,13 @@ Because MT6701 cant change I2C address, only one encoder could be connected at s
  Arduino    |      MT6701
    A5    <----->    CLK
    A4    <----->    DO/SDA
+   5V    <----->    CSN
+```
+
+```
+  ESP32     |      MT6701
+   D22   <----->    CLK
+   D21   <----->    DO/SDA
    5V    <----->    CSN
 ```
 
