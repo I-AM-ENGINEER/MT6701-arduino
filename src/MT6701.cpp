@@ -33,12 +33,11 @@ uint8_t MT6701::ssi_read( uint8_t* data, uint8_t len ){
 	if(len != 3){
 		return 1;
 	}
-	uint32_t tmp;
-	SPI.beginTransaction(SPISettings(MT6701_SSI_CLOCK, MSBFIRST, SPI_MODE2));
-	for(uint32_t i = 0; i < 4; i++){
-		((uint8_t*)&tmp)[i] = SPI.transfer(0xff);
-	}
-	tmp <<= 1;
+	uint8_t tmp[3];
+	SPI.beginTransaction(SPISettings(MT6701_SSI_CLOCK, MSBFIRST, SPI_MODE1));
+	tmp[0] = SPI.transfer(0xff);
+	tmp[1] = SPI.transfer(0xff);
+	tmp[2] = SPI.transfer(0xff);
 	memcpy(data, &tmp, 3);
 	SPI.endTransaction();
 	return 0;
