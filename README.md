@@ -71,8 +71,10 @@ Because MT6701 cant change I2C address, only one encoder could be connected at s
   ESP32     |      MT6701
    D22   <----->    CLK
    D21   <----->    DO/SDA
-   5V    <----->    CSN
+   VDD    <----->    CSN
 ```
+
+**NB: EEPROM programming requires VDD > 4.5V**
 
 #### Initialization
 ```c
