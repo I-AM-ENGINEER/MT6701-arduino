@@ -57,7 +57,8 @@ void setup() {
 
 ### I2C
 I2C uses mainly for one time configuration. You can configure every option of encoder and save settings in chip EEPROM. I dont recomend use this interface, if you only need read angle, use SSI or any other options from datasheet.
-Because MT6701 cant change I2C address, only one encoder could be connected at same time.
+Because MT6701 can't change I2C address without reprogramming, only one encoder can be connected to I2C bus at a time.
+[Esp32] However if your chip has many I2C buses, you can use Wire1 or potentially other implementations of I2C protocol to have one MT6701 per bus.
 
 #### Wiring
 ```

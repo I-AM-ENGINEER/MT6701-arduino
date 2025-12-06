@@ -165,8 +165,9 @@ typedef enum{
 } mt6701_status_t;
 
 typedef struct{
-	uint8_t (*i2c_read)( uint8_t reg, uint8_t *data );
-	uint8_t (*i2c_write)( uint8_t reg, uint8_t data );
+	void *i2c_object;
+	uint8_t (*i2c_read)( void *obj, uint8_t reg, uint8_t *data );
+	uint8_t (*i2c_write)( void *obj, uint8_t reg, uint8_t data );
 	uint8_t (*ssi_read)( uint8_t *data, uint8_t len );
 	void (*delay)( uint32_t ms );
 	mt6701_interface_t interface;

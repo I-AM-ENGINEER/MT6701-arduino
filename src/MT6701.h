@@ -41,8 +41,33 @@ SOFTWARE.
 class MT6701 {
 public:
 	MT6701( void );
-	// Only hardware I2C and SPI support
-	bool initializeI2C( void );
+	
+	/*!
+	 * @brief  Initialize MT6701 for work over I2C using any Wire-compatible interface
+	 * @tparam T The type of Wire interface (e.g., TwoWire, SoftWire)
+	 * @param  wire_interface Pointer to the Wire instance (e.g., &Wire, &Wire1)
+	 */
+	template <typename T>
+	bool initializeI2C(T *wire_interface) {
+		uint8_t res;
+
+		this->handle.i2c_object = (void *)wire_interface;
+		this->handle.i2c_read = i2c_read_template<T>;
+		this->handle.i2c_write = i2c_write_template<T>;
+
+		res = mt6701_interface_set(&this->handle, MT6701_INTERFACE_I2C);
+		if(res != MT6701_OK){
+			return false;
+		}
+
+		res = mt6701_init(&this->handle);
+		if(res != MT6701_OK){
+			return false;
+		}
+
+		return true;
+	}
+
 	bool initializeSSI( int cs_pin );
 
 	// SPI & I2C functions
@@ -70,8 +95,32 @@ private:
 
 	// Internal c function for driver
 	static uint8_t ssi_read( uint8_t* data, uint8_t len );
-	static uint8_t i2c_write( uint8_t reg, uint8_t data );
-	static uint8_t i2c_read( uint8_t reg, uint8_t *data );
+	
+	// Template wrappers for I2C read/write to support any Wire-like class
+	template <typename T>
+	static uint8_t i2c_read_template(void *obj, uint8_t reg, uint8_t *data) {
+		T *wire = (T*)obj;
+		wire->beginTransmission(MT6701_DEFAULT_ADDRESS);
+		wire->write(reg);
+		wire->endTransmission(false);
+		wire->requestFrom(MT6701_DEFAULT_ADDRESS, 1);
+		if (wire->available()) {
+			*data = wire->read();
+		} else {
+			return 1;
+		}
+		return 0;
+	}
+
+	template <typename T>
+	static uint8_t i2c_write_template(void *obj, uint8_t reg, uint8_t data) {
+		T *wire = (T*)obj;
+		wire->beginTransmission(MT6701_DEFAULT_ADDRESS);
+		wire->write(reg);
+		wire->write(data);
+		wire->endTransmission();
+		return 0;
+	}
 };
 
 #endif // MT6701_ARDUINO_WRAPPER_H__
