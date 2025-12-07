@@ -29,6 +29,7 @@ SOFTWARE.
 #define MT6701_ARDUINO_WRAPPER_H__
 
 #include <Arduino.h>
+#include <Wire.h>
 #include "mt6701/mt6701.h"
 
 #ifndef MT6701_SSI_CLOCK
@@ -67,6 +68,13 @@ public:
 
 		return true;
 	}
+	
+	/*!
+	 * @brief  Initialize MT6701 for work over the default I2C interface
+	 */
+    bool initializeI2C(void) {
+        return this->initializeI2C<TwoWire>(&Wire);
+    }
 
 	bool initializeSSI( int cs_pin );
 
