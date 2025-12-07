@@ -53,7 +53,7 @@ uint8_t mt6701_nanbnz_enable( mt6701_handle_t *handle, bool nanbnz_enable ){
 		return res;
 	}
 
-	res = handle->i2c_read(MT6701_REG_UVM_MUX, &data);
+	res = handle->i2c_read(handle->i2c_object, MT6701_REG_UVM_MUX, &data);
 
 	if(nanbnz_enable){
 		data |= MT6701_REG_UVM_MUX_MASK;
@@ -61,7 +61,7 @@ uint8_t mt6701_nanbnz_enable( mt6701_handle_t *handle, bool nanbnz_enable ){
 		data &= ~MT6701_REG_UVM_MUX_MASK;
 	}
 	
-	res = handle->i2c_write(MT6701_REG_UVM_MUX, data);
+	res = handle->i2c_write(handle->i2c_object, MT6701_REG_UVM_MUX, data);
 	if(res != 0){
 		return MT6701_ERR_IO;
 	}
@@ -83,12 +83,12 @@ uint8_t mt6701_abz_pulse_per_round_set( mt6701_handle_t *handle, uint16_t resolu
 		return MT6701_ERR_OUT_OF_RANGE;
 	}
 
-	res = handle->i2c_read(MT6701_REG_ABZ_RES8, &data);
+	res = handle->i2c_read(handle->i2c_object, MT6701_REG_ABZ_RES8, &data);
 	if(res != 0){
 		return MT6701_ERR_IO;
 	}
 
-	res = handle->i2c_write(MT6701_REG_ABZ_RES0, (uint8_t)resolution);
+	res = handle->i2c_write(handle->i2c_object, MT6701_REG_ABZ_RES0, (uint8_t)resolution);
 	if(res != 0){
 		return MT6701_ERR_IO;
 	}
@@ -97,7 +97,7 @@ uint8_t mt6701_abz_pulse_per_round_set( mt6701_handle_t *handle, uint16_t resolu
 	data &= ~MT6701_REG_ABZ_RES8_MASK;
 	data |= (uint8_t)(resolution << MT6701_REG_ZERO8_POS);
 
-	res = handle->i2c_write(MT6701_REG_ABZ_RES8, data);
+	res = handle->i2c_write(handle->i2c_object, MT6701_REG_ABZ_RES8, data);
 	if(res != 0){
 		return MT6701_ERR_IO;
 	}
@@ -119,7 +119,7 @@ uint8_t mt6701_uvw_pole_pair_set( mt6701_handle_t *handle, uint8_t pole_pairs ){
 		return MT6701_ERR_OUT_OF_RANGE;
 	}
 
-	res = handle->i2c_read(MT6701_REG_UVW_RES0, &data);
+	res = handle->i2c_read(handle->i2c_object, MT6701_REG_UVW_RES0, &data);
 	if(res != 0){
 		return MT6701_ERR_IO;
 	}
@@ -127,7 +127,7 @@ uint8_t mt6701_uvw_pole_pair_set( mt6701_handle_t *handle, uint8_t pole_pairs ){
 	data &= ~MT6701_REG_UVW_RES0_MASK;
 	data |= (MT6701_REG_UVW_RES0_POS << pole_pairs);
 
-	res = handle->i2c_write(MT6701_REG_UVW_RES0, data);
+	res = handle->i2c_write(handle->i2c_object, MT6701_REG_UVW_RES0, data);
 	if(res != 0){
 		return MT6701_ERR_IO;
 	}
@@ -144,7 +144,7 @@ uint8_t mt6701_mode_set( mt6701_handle_t *handle, mt6701_mode_t mode ){
 		return res;
 	}
 
-	res = handle->i2c_read(MT6701_REG_ABZ_MUX, &data);
+	res = handle->i2c_read(handle->i2c_object, MT6701_REG_ABZ_MUX, &data);
 	if(res != 0){
 		return MT6701_ERR_IO;
 	}
@@ -155,7 +155,7 @@ uint8_t mt6701_mode_set( mt6701_handle_t *handle, mt6701_mode_t mode ){
 		data &= ~MT6701_REG_ABZ_MUX_MASK;
 	}
 
-	res = handle->i2c_write(MT6701_REG_ABZ_MUX, data);
+	res = handle->i2c_write(handle->i2c_object, MT6701_REG_ABZ_MUX, data);
 	if(res != 0){
 		return MT6701_ERR_IO;
 	}
@@ -185,12 +185,12 @@ uint8_t mt6701_zero_set_raw( mt6701_handle_t *handle, uint16_t zero_angle ){
 	
 	zero_angle &= 0x0FFF;	
 
-	res = handle->i2c_write(MT6701_REG_ZERO0, (uint8_t)zero_angle);
+	res = handle->i2c_write(handle->i2c_object, MT6701_REG_ZERO0, (uint8_t)zero_angle);
 	if(res != 0){
 		return MT6701_ERR_IO;
 	}
 
-	res = handle->i2c_read(MT6701_REG_ZERO8, &data);
+	res = handle->i2c_read(handle->i2c_object, MT6701_REG_ZERO8, &data);
 	if(res != 0){
 		return MT6701_ERR_IO;
 	}
@@ -199,7 +199,7 @@ uint8_t mt6701_zero_set_raw( mt6701_handle_t *handle, uint16_t zero_angle ){
 	data &= ~MT6701_REG_ZERO8_MASK;
 	data |= (zero_angle << MT6701_REG_ZERO8_POS);
 
-	res = handle->i2c_write(MT6701_REG_ZERO8, data);
+	res = handle->i2c_write(handle->i2c_object, MT6701_REG_ZERO8, data);
 	if(res != 0){
 		return MT6701_ERR_IO;
 	}
@@ -228,7 +228,7 @@ uint8_t mt6701_hyst_set( mt6701_handle_t *handle, mt6701_hyst_t hysteresis ){
 		return 1;
 	}
 
-	res = handle->i2c_read(MT6701_REG_HYST0, &data);
+	res = handle->i2c_read(handle->i2c_object, MT6701_REG_HYST0, &data);
 	if(res != 0){
 		return 1;
 	}
@@ -237,12 +237,12 @@ uint8_t mt6701_hyst_set( mt6701_handle_t *handle, mt6701_hyst_t hysteresis ){
 	data &= ~MT6701_REG_HYST0_MASK;
 	data |= (hyst_lo << MT6701_REG_HYST0_POS);
 
-	res = handle->i2c_write(MT6701_REG_HYST0, data);
+	res = handle->i2c_write(handle->i2c_object, MT6701_REG_HYST0, data);
 	if(res != 0){
 		return 1;
 	}
 
-	res = handle->i2c_read(MT6701_REG_HYST2, &data);
+	res = handle->i2c_read(handle->i2c_object, MT6701_REG_HYST2, &data);
 	if(res != 0){
 		return 1;
 	}
@@ -251,7 +251,7 @@ uint8_t mt6701_hyst_set( mt6701_handle_t *handle, mt6701_hyst_t hysteresis ){
 	data &= ~MT6701_REG_HYST2_MASK;
 	data |= (hyst_hi << MT6701_REG_HYST2_POS);
 
-	res = handle->i2c_write(MT6701_REG_HYST2, data);
+	res = handle->i2c_write(handle->i2c_object, MT6701_REG_HYST2, data);
 	if(res != 0){
 		return 1;
 	}
@@ -276,12 +276,12 @@ uint8_t mt6701_a_start_stop_set_raw( mt6701_handle_t *handle, uint16_t start, ui
 		return MT6701_ERR_OUT_OF_RANGE;
 	}
 
-	res = handle->i2c_write(MT6701_REG_A_START0, (uint8_t)start);
+	res = handle->i2c_write(handle->i2c_object, MT6701_REG_A_START0, (uint8_t)start);
 	if(res != 0){
 		return MT6701_ERR_IO;
 	}
 
-	res = handle->i2c_write(MT6701_REG_A_STOP0, (uint8_t)stop);
+	res = handle->i2c_write(handle->i2c_object, MT6701_REG_A_STOP0, (uint8_t)stop);
 	if(res != 0){
 		return MT6701_ERR_IO;
 	}
@@ -290,7 +290,7 @@ uint8_t mt6701_a_start_stop_set_raw( mt6701_handle_t *handle, uint16_t start, ui
 	stop  >>= 8;
 	data = (start << MT6701_REG_A_START8_POS) | (stop << MT6701_REG_A_STOP8_POS);
 
-	res = handle->i2c_write(MT6701_REG_A_START8, data);
+	res = handle->i2c_write(handle->i2c_object, MT6701_REG_A_START8, data);
 	if(res != 0){
 		return MT6701_ERR_IO;
 	}
@@ -324,7 +324,7 @@ uint8_t mt6701_direction_set( mt6701_handle_t *handle, mt6701_direction_t direct
 		return MT6701_ERR_HANDLER_NULL;
 	}
 
-	res = handle->i2c_read(MT6701_REG_DIR, &data);
+	res = handle->i2c_read(handle->i2c_object, MT6701_REG_DIR, &data);
 	if(res != 0){
 		return MT6701_ERR_IO;
 	}
@@ -337,7 +337,7 @@ uint8_t mt6701_direction_set( mt6701_handle_t *handle, mt6701_direction_t direct
 		return MT6701_ERR_GENERAL;
 	}
 
-	res = handle->i2c_write(MT6701_REG_DIR, data);
+	res = handle->i2c_write(handle->i2c_object, MT6701_REG_DIR, data);
 	if(res != 0){
 		return MT6701_ERR_IO;
 	}
@@ -354,7 +354,7 @@ uint8_t mt6701_pulse_width_set( mt6701_handle_t *handle, mt6701_pulse_width_t pu
 		return res;
 	}
 
-	res = handle->i2c_read(MT6701_REG_PULSE_WIDTH, &data);
+	res = handle->i2c_read(handle->i2c_object, MT6701_REG_PULSE_WIDTH, &data);
 	if(res != 0){
 		return MT6701_ERR_IO;
 	}
@@ -362,7 +362,7 @@ uint8_t mt6701_pulse_width_set( mt6701_handle_t *handle, mt6701_pulse_width_t pu
 	data &= ~MT6701_REG_PULSE_WIDTH_MASK;
 	data |= (pulse_width << MT6701_REG_PULSE_WIDTH_POS);
 
-	res = handle->i2c_write(MT6701_REG_PULSE_WIDTH, data);
+	res = handle->i2c_write(handle->i2c_object, MT6701_REG_PULSE_WIDTH, data);
 	if(res != 0){
 		return MT6701_ERR_IO;
 	}
@@ -379,7 +379,7 @@ uint8_t mt6701_pwm_freq_set( mt6701_handle_t *handle, mt6701_pwm_freq_t pwm_freq
 		return res;
 	}
 
-	res = handle->i2c_read(MT6701_REG_PWM_FREQ, &data);
+	res = handle->i2c_read(handle->i2c_object, MT6701_REG_PWM_FREQ, &data);
 	if(res != 0){
 		return MT6701_ERR_IO;
 	}
@@ -392,7 +392,7 @@ uint8_t mt6701_pwm_freq_set( mt6701_handle_t *handle, mt6701_pwm_freq_t pwm_freq
 		return MT6701_ERR_GENERAL;
 	}
 
-	res = handle->i2c_write(MT6701_REG_PWM_FREQ, data);
+	res = handle->i2c_write(handle->i2c_object, MT6701_REG_PWM_FREQ, data);
 	if(res != 0){
 		return MT6701_ERR_IO;
 	}
@@ -409,7 +409,7 @@ uint8_t mt6701_pwm_polarity_set( mt6701_handle_t *handle, mt6701_pwm_pol_t pwm_p
 		return res;
 	}
 
-	res = handle->i2c_read(MT6701_REG_PWM_POL, &data);
+	res = handle->i2c_read(handle->i2c_object, MT6701_REG_PWM_POL, &data);
 	if(res != 0){
 		return MT6701_ERR_IO;
 	}
@@ -422,7 +422,7 @@ uint8_t mt6701_pwm_polarity_set( mt6701_handle_t *handle, mt6701_pwm_pol_t pwm_p
 		return MT6701_ERR_GENERAL;
 	}
 
-	res = handle->i2c_write(MT6701_REG_PWM_POL, data);
+	res = handle->i2c_write(handle->i2c_object, MT6701_REG_PWM_POL, data);
 	if(res != 0){
 		return MT6701_ERR_IO;
 	}
@@ -439,7 +439,7 @@ uint8_t mt6701_out_mode_set( mt6701_handle_t *handle, mt6701_out_mode_t out_mode
 		return res;
 	}
 
-	res = handle->i2c_read(MT6701_REG_PWM_POL, &data);
+	res = handle->i2c_read(handle->i2c_object, MT6701_REG_PWM_POL, &data);
 	if(res != 0){
 		return MT6701_ERR_IO;
 	}
@@ -452,7 +452,7 @@ uint8_t mt6701_out_mode_set( mt6701_handle_t *handle, mt6701_out_mode_t out_mode
 		return MT6701_ERR_GENERAL;
 	}
 
-	res = handle->i2c_write(MT6701_REG_OUT_MODE, data);
+	res = handle->i2c_write(handle->i2c_object, MT6701_REG_OUT_MODE, data);
 	if(res != 0){
 		return MT6701_ERR_IO;
 	}
@@ -502,12 +502,12 @@ uint8_t mt6701_programm_eeprom( mt6701_handle_t *handle ){
 		return MT6701_ERR_GENERAL;
 	}
 
-	res = handle->i2c_write(0x09, 0xB3);
+	res = handle->i2c_write(handle->i2c_object, 0x09, 0xB3);
 	if(res != 0){
 		return MT6701_ERR_IO;
 	}
 
-	res = handle->i2c_write(0x0A, 0x05);
+	res = handle->i2c_write(handle->i2c_object, 0x0A, 0x05);
 	if(res != 0){
 		return MT6701_ERR_IO;
 	}
@@ -533,12 +533,12 @@ uint8_t mt6701_read_raw( mt6701_handle_t *handle, uint16_t *angle_raw, mt6701_st
 	}
 
 	if(handle->interface == MT6701_INTERFACE_I2C){
-		res = handle->i2c_read(MT6701_REG_ANGLE6, &data[1]);
+		res = handle->i2c_read(handle->i2c_object, MT6701_REG_ANGLE6, &data[1]);
 		if(res != 0){
 			return MT6701_ERR_IO;
 		}
 		
-		res = handle->i2c_read(MT6701_REG_ANGLE0, &data[0]);
+		res = handle->i2c_read(handle->i2c_object, MT6701_REG_ANGLE0, &data[0]);
 		if(res != 0){
 			return MT6701_ERR_IO;
 		}

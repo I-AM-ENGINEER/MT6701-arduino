@@ -26,7 +26,6 @@ SOFTWARE.
 */
 
 #include "MT6701.h"
-#include <Wire.h>
 #include <SPI.h>
 
 uint8_t MT6701::ssi_read( uint8_t* data, uint8_t len ){
@@ -43,27 +42,6 @@ uint8_t MT6701::ssi_read( uint8_t* data, uint8_t len ){
 	return 0;
 }
 
-uint8_t MT6701::i2c_read( uint8_t reg, uint8_t *data ){  
-	Wire.beginTransmission(MT6701_DEFAULT_ADDRESS);
-	Wire.write(reg);
-	Wire.endTransmission(false);
-	Wire.requestFrom(MT6701_DEFAULT_ADDRESS, 1);
-	if (Wire.available()) {
-		*data = Wire.read();
-	}else{
-		return 1;
-	}
-	return 0;
-}
-
-uint8_t MT6701::i2c_write( uint8_t reg, uint8_t data ){
-	Wire.beginTransmission(MT6701_DEFAULT_ADDRESS);
-	Wire.write(reg);
-	Wire.write(data);
-	Wire.endTransmission();
-	return 0;
-}
-
 static void mt6701_delay( uint32_t ms ){
 	delay(ms);
 }
@@ -77,30 +55,8 @@ MT6701::MT6701( void ) {
 }
 
 /*!
- *  @brief  Initialize MT6701 for work over I2C
- */
-bool MT6701::initializeI2C( void ){
-	uint8_t res;
-
-	res = mt6701_interface_set(&this->handle, MT6701_INTERFACE_I2C);
-	if(res != MT6701_OK){
-		return false;
-	}
-
-	this->handle.i2c_read = this->i2c_read;
-	this->handle.i2c_write = this->i2c_write;
-
-	res = mt6701_init(&this->handle);
-	if(res != MT6701_OK){
-		return false;
-	}
-
-	return true;
-}
-
-/*!
- *  @brief  Initialize MT6701 for work over ISS over SPI
- *  @param  cs_pin CSN pin of MT6701
+ * @brief  Initialize MT6701 for work over ISS over SPI
+ * @param  cs_pin CSN pin of MT6701
  */
 bool MT6701::initializeSSI( int cs_pin ){
 	uint8_t res;
