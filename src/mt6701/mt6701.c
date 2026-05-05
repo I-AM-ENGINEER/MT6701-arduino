@@ -460,6 +460,36 @@ uint8_t mt6701_out_mode_set( mt6701_handle_t *handle, mt6701_out_mode_t out_mode
 	return MT6701_OK;
 }
 
+uint8_t mt6701_i2c_addr_alt_set( mt6701_handle_t *handle, bool use_alternate ){
+	uint8_t res;
+	uint8_t data;
+
+	res = mt6701_check_config_mode(handle);
+	if(res != MT6701_OK){
+		return res;
+	}
+
+	res = handle->i2c_read(handle->i2c_object, MT6701_REG_I2C_ADDR, &data);
+	if(res != 0){
+		return MT6701_ERR_IO;
+	}
+
+	if(use_alternate){
+		data |=  MT6701_REG_I2C_ADDR_ALT_MASK;
+	}else{
+		data &= ~MT6701_REG_I2C_ADDR_ALT_MASK;
+	}
+
+	res = handle->i2c_write(handle->i2c_object, MT6701_REG_I2C_ADDR, data);
+	if(res != 0){
+		return MT6701_ERR_IO;
+	}
+
+	handle->delay(100);
+
+	return MT6701_OK;
+}
+
 uint8_t mt6701_init( mt6701_handle_t *handle ){
 	if(handle == NULL){
 		return MT6701_ERR_HANDLER_NULL;

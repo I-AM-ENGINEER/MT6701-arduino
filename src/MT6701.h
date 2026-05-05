@@ -49,10 +49,13 @@ public:
 	 * @param  wire_interface Pointer to the Wire instance (e.g., &Wire, &Wire1)
 	 */
 	template <typename T>
-	bool initializeI2C(T *wire_interface) {
+	bool initializeI2C(T *wire_interface, uint8_t address = MT6701_DEFAULT_ADDRESS) {
 		uint8_t res;
 
-		this->handle.i2c_object = (void *)wire_interface;
+		_i2c_ctx.wire = (void *)wire_interface;
+		_i2c_ctx.address = address;
+
+		this->handle.i2c_object = &_i2c_ctx;
 		this->handle.i2c_read = i2c_read_template<T>;
 		this->handle.i2c_write = i2c_write_template<T>;
 
@@ -68,13 +71,13 @@ public:
 
 		return true;
 	}
-	
+
 	/*!
 	 * @brief  Initialize MT6701 for work over the default I2C interface
 	 */
-    bool initializeI2C(void) {
-        return this->initializeI2C<TwoWire>(&Wire);
-    }
+	bool initializeI2C(void) {
+		return this->initializeI2C<TwoWire>(&Wire, MT6701_DEFAULT_ADDRESS);
+	}
 
 	bool initializeSSI( int cs_pin );
 
@@ -96,22 +99,31 @@ public:
 	void directionSet( mt6701_direction_t direction );
 	// Save settings as default
 	void programmEEPROM( void );
+	// Change I2C address permanently (irreversible)
+	bool i2cAddressChangeToAlternate( void );
 
 private:
 	int cs_pin;
 	mt6701_handle_t handle;
 
+	struct I2CContext {
+		void *wire;
+		uint8_t address;
+	};
+	I2CContext _i2c_ctx;
+
 	// Internal c function for driver
 	static uint8_t ssi_read( uint8_t* data, uint8_t len );
-	
+
 	// Template wrappers for I2C read/write to support any Wire-like class
 	template <typename T>
 	static uint8_t i2c_read_template(void *obj, uint8_t reg, uint8_t *data) {
-		T *wire = (T*)obj;
-		wire->beginTransmission(MT6701_DEFAULT_ADDRESS);
+		I2CContext *ctx = (I2CContext*)obj;
+		T *wire = (T*)ctx->wire;
+		wire->beginTransmission(ctx->address);
 		wire->write(reg);
 		wire->endTransmission(false);
-		wire->requestFrom(MT6701_DEFAULT_ADDRESS, 1);
+		wire->requestFrom(ctx->address, 1);
 		if (wire->available()) {
 			*data = wire->read();
 		} else {
@@ -122,8 +134,9 @@ private:
 
 	template <typename T>
 	static uint8_t i2c_write_template(void *obj, uint8_t reg, uint8_t data) {
-		T *wire = (T*)obj;
-		wire->beginTransmission(MT6701_DEFAULT_ADDRESS);
+		I2CContext *ctx = (I2CContext*)obj;
+		T *wire = (T*)ctx->wire;
+		wire->beginTransmission(ctx->address);
 		wire->write(reg);
 		wire->write(data);
 		wire->endTransmission();
