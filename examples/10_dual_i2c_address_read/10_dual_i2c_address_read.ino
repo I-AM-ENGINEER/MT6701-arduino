@@ -2,7 +2,7 @@
 //   Sensor 1: default address 0x06
 //   Sensor 2: alternate address 0x46
 //
-// NOTE: One sensor must have its address permanently changed to 0x46 before
+// NOTE: One sensor must have its address changed to 0x46 before
 // using this example. Use example 09_i2c_address_change for that.
 
 #include <Wire.h>

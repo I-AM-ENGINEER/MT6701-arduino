@@ -1,7 +1,10 @@
-// WARNING: This sketch permanently changes the MT6701 I2C address from
-// the default (0x06) to the alternate address (0x46).
-// After running, the sensor will always respond at 0x46 on power-up.
+// This sketch changes the MT6701 I2C address between default (0x06) and
+// alternate (0x46) and optionally saves the result to EEPROM.
 // Use example 10_dual_i2c_address_read to read two sensors on the same bus.
+
+// Set to 1 to change from default (0x06) -> alternate (0x46)
+// Set to 0 to change from alternate (0x46) -> default (0x06)
+#define CHANGE_TO_ALTERNATE 1
 
 #include <Wire.h>
 #include "MT6701.h"
@@ -11,32 +14,39 @@ MT6701 encoder;
 void setup() {
   Serial.begin(115200);
   Wire.begin();
-  encoder.initializeI2C();
+#if CHANGE_TO_ALTERNATE
+  encoder.initializeI2C(&Wire, MT6701_DEFAULT_ADDRESS);
+#else
+  encoder.initializeI2C(&Wire, MT6701_ALTERNATE_ADDRESS);
+#endif
 
   Serial.println("Reading angle for 3 seconds...");
   unsigned long start = millis();
   while (millis() - start < 3000) {
     Serial.print("Angle: ");
     Serial.println(encoder.angleRead());
-    delay(500);
+    delay(100);
   }
 
   Serial.println();
-  Serial.println("WARNING: I2C address will be permanently changed to 0x46!");
-  for (int i = 10; i > 0; i--) {
-    Serial.println(i);
-    delay(1000);
-  }
 
-  if (encoder.i2cAddressChangeToAlternate()) {
-    Serial.println("Success. Sensor now responds at 0x46.");
+#if CHANGE_TO_ALTERNATE
+  Serial.println("Changing address: 0x06 -> 0x46...");
+  bool ok = encoder.i2cAddressChangeToAlternate();
+#else
+  Serial.println("Changing address: 0x46 -> 0x06...");
+  bool ok = encoder.i2cAddressChangeToDefault();
+#endif
+
+  if (ok) {
+    Serial.println("Success.");
   } else {
-    Serial.println("Address change failed. Sensor still at 0x06.");
+    Serial.println("Failed.");
   }
 }
 
 void loop() {
   Serial.print("Angle: ");
   Serial.println(encoder.angleRead());
-  delay(500);
+  delay(100);
 }

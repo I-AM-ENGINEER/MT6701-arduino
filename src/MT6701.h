@@ -99,7 +99,7 @@ public:
 	void directionSet( mt6701_direction_t direction );
 	// Save settings as default
 	void programmEEPROM( void );
-	// Change I2C address permanently (irreversible)
+	// Change I2C address
 	bool i2cAddressChangeToAlternate( void );
 
 private:

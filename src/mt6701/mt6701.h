@@ -295,7 +295,7 @@ uint8_t mt6701_out_mode_set( mt6701_handle_t *handle, mt6701_out_mode_t out_mode
 /// @return On OK return 0, else see MT6701_ERR codes
 uint8_t mt6701_programm_eeprom( mt6701_handle_t *handle );
 
-/// @brief Permanently change I2C address. Call mt6701_programm_eeprom after to save.
+/// @brief Change I2C address. Call mt6701_programm_eeprom after to save.
 /// After this call, handle address must be updated before any further communication.
 /// @param handle mt6701 handler
 /// @param use_alternate True - switch to alternate address (0x46), False - switch to default (0x06)

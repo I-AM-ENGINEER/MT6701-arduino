@@ -203,7 +203,7 @@ void MT6701::programmEEPROM( void ){
 }
 
 /*!
- *  @brief  Permanently change I2C address to alternate (0x46). Irreversible.
+ *  @brief  Change I2C address to alternate (0x46). Save to EEPROM with programmEEPROM().
  *  @return True on success
  */
 bool MT6701::i2cAddressChangeToAlternate( void ){
