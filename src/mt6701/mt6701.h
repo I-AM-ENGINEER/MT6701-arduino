@@ -32,6 +32,7 @@ SOFTWARE.
 #include <stdbool.h>
 
 #define MT6701_DEFAULT_ADDRESS				0x06
+#define MT6701_ALTERNATE_ADDRESS			0x46
 
 #define MT6701_OK							0
 #define MT6701_ERR_GENERAL					1
@@ -44,6 +45,7 @@ SOFTWARE.
 #define MT6701_REG_ANGLE0					0x04
 #define MT6701_REG_ANGLE6					0x03
 #define MT6701_REG_UVM_MUX					0x25
+#define MT6701_REG_I2C_ADDR					0x28
 #define MT6701_REG_ABZ_MUX					0x29
 #define MT6701_REG_DIR						0x29
 #define MT6701_REG_UVW_RES0					0x30
@@ -66,6 +68,7 @@ SOFTWARE.
 #define MT6701_REG_ANGLE0_POS				2
 #define MT6701_REG_ANGLE6_POS				0
 #define MT6701_REG_UVM_MUX_POS				7
+#define MT6701_REG_I2C_ADDR_ALT_POS			3
 #define MT6701_REG_ABZ_MUX_POS				6
 #define MT6701_REG_DIR_POS					1
 #define MT6701_REG_UVW_RES0_POS				4
@@ -88,6 +91,7 @@ SOFTWARE.
 #define MT6701_REG_ANGLE0_MASK				(0x3F << MT6701_REG_ANGLE0_POS)
 #define MT6701_REG_ANGLE6_MASK				(0xFF << MT6701_REG_ANGLE6_POS)
 #define MT6701_REG_UVM_MUX_MASK				(0x01 << MT6701_REG_UVM_MUX_POS)
+#define MT6701_REG_I2C_ADDR_ALT_MASK		(0x01 << MT6701_REG_I2C_ADDR_ALT_POS)
 #define MT6701_REG_ABZ_MUX_MASK				(0x01 << MT6701_REG_ABZ_MUX_POS)
 #define MT6701_REG_DIR_MASK					(0x01 << MT6701_REG_DIR_POS)
 #define MT6701_REG_UVW_RES0_MASK			(0x0F << MT6701_REG_UVW_RES0_POS)
@@ -290,6 +294,13 @@ uint8_t mt6701_out_mode_set( mt6701_handle_t *handle, mt6701_out_mode_t out_mode
 /// @param handle mt6701 handler
 /// @return On OK return 0, else see MT6701_ERR codes
 uint8_t mt6701_programm_eeprom( mt6701_handle_t *handle );
+
+/// @brief Change I2C address. Call mt6701_programm_eeprom after to save.
+/// After this call, handle address must be updated before any further communication.
+/// @param handle mt6701 handler
+/// @param use_alternate True - switch to alternate address (0x46), False - switch to default (0x06)
+/// @return On OK return 0, else see MT6701_ERR codes
+uint8_t mt6701_i2c_addr_alt_set( mt6701_handle_t *handle, bool use_alternate );
 
 /// @brief Perfom init for mt6701. Before call interface MUST be selected and selected interface handlers MUST be defined, plus delay handler MUST be set
 /// @param handle mt6701 handler

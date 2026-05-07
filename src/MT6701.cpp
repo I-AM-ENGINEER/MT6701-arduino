@@ -201,3 +201,16 @@ void MT6701::directionSet( mt6701_direction_t direction ){
 void MT6701::programmEEPROM( void ){
 	mt6701_programm_eeprom(&this->handle);
 }
+
+/*!
+ *  @brief  Change I2C address to alternate (0x46). Save to EEPROM with programmEEPROM().
+ *  @return True on success
+ */
+bool MT6701::i2cAddressChangeToAlternate( void ){
+	if(mt6701_i2c_addr_alt_set(&this->handle, true) != MT6701_OK){
+		return false;
+	}
+	_i2c_ctx.address = MT6701_ALTERNATE_ADDRESS;
+	mt6701_programm_eeprom(&this->handle);
+	return true;
+}
