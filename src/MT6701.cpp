@@ -214,3 +214,16 @@ bool MT6701::i2cAddressChangeToAlternate( void ){
 	mt6701_programm_eeprom(&this->handle);
 	return true;
 }
+
+/*!
+ *  @brief  Change I2C address to default (0x06). Save to EEPROM with programmEEPROM().
+ *  @return True on success
+ */
+bool MT6701::i2cAddressChangeToDefault( void ){
+	if(mt6701_i2c_addr_alt_set(&this->handle, false) != MT6701_OK){
+		return false;
+	}
+	_i2c_ctx.address = MT6701_DEFAULT_ADDRESS;
+	mt6701_programm_eeprom(&this->handle);
+	return true;
+}

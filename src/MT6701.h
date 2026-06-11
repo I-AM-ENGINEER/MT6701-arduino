@@ -101,6 +101,7 @@ public:
 	void programmEEPROM( void );
 	// Change I2C address
 	bool i2cAddressChangeToAlternate( void );
+	bool i2cAddressChangeToDefault( void );
 
 private:
 	int cs_pin;
