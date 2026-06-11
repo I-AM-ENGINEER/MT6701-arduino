@@ -124,7 +124,7 @@ private:
 		wire->beginTransmission(ctx->address);
 		wire->write(reg);
 		wire->endTransmission(false);
-		wire->requestFrom(ctx->address, 1);
+		wire->requestFrom(ctx->address, (uint8_t)1);
 		if (wire->available()) {
 			*data = wire->read();
 		} else {
