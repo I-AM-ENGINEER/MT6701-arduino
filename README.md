@@ -96,6 +96,7 @@ void setup() {
 ```
 
 ## Usage
+> CW and CCW directions are swapped relative to the datasheet.
 
 For both (SSI and I2C) interfaces available function for read angle, they return 0...360 float value:
 ```c
@@ -121,6 +122,9 @@ Other functions are I2C only and used for configure chip for imitate other encod
   void directionSet( mt6701_direction_t direction );
   // Save settings as default for chip
   void programmEEPROM( void );
+  // Change I2C address
+  bool i2cAddressChangeToAlternate( void );
+  bool i2cAddressChangeToDefault( void );
 ```
 
 If you need more information for this functions, read examples they include all function and arguments description. For further information, read datasheet
